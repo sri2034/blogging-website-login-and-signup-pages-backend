@@ -25,20 +25,25 @@ app.use(cors());
 
 const User = new mongoose.model("User",userSchema)
 
-app.post("/login", (req, res)=> {
-    const { username, password} = req.body
-    User.findOne({ username: username}, (err, user) => {
-        if(user){
-            if(password === user.password ) {
-                res.send({message: "Login Successfull", user: user})
-            } else {
-                res.send({ message: "Incorrect Password"})
-            }
-        } else {
-            res.send({message: "User not registered"})
-        }
-    })
-}) 
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  User.findOne({ username: username }, (err, user) => {
+    if (err) {
+      // Handle database or other server-side errors
+      res.status(500).send({ message: "Server error" });
+    } else if (user) {
+      if (password === user.password) {
+        res.send({ message: "Login Successful", user: user });
+      } else {
+        res.status(401).send({ message: "Incorrect Password" });
+      }
+    } else {
+      res.status(404).send({ message: "User not registered" });
+    }
+  });
+});
+
+
 
 app.post("/register", (req, res) => {
     const { name, username, email, phno, password, dob } = req.body;
