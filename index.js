@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String
 },{
-    collection: "user"
+    collection: "User"
 });
 
 const app = express();
